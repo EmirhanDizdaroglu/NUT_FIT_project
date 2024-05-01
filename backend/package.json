@@ -1,0 +1,20 @@
+{
+  "name": "nut-fit-app",
+  "version": "1.0.0",
+  "description": "nutfit",
+  "main": "app.js",
+  "dependencies": {
+    "axios": "^1.6.8",
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.18.3",
+    "mongoose": "^8.2.3"
+  },
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "emir",
+  "license": "ISC",
+  "keywords": []
+}

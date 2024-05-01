@@ -1,0 +1,43 @@
+{
+  "name": "nut-fit-app-frontend",
+  "version": "1.0.0",
+  "description": "NutFit Frontend",
+  "main": "index.js",
+  "dependencies": {
+    "autoprefixer": "^10.4.19",
+    "axios": "^0.24.0",
+    "bootstrap": "^5.3.3",
+    "plugins": "@babel/plugin-proposal-private-property-in-object",
+    "postcss": "^8.4.38",
+    "presets": "@babel/preset-react",
+    "react-bootstrap": "^2.10.2",
+    "react-router-dom": "^6.22.3",
+    "react-scripts": "^5.0.1",
+    "tailwindcss": "^3.4.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "author": "emir",
+  "license": "ISC",
+  "keywords": [],
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version",
+      "last 1 edge version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+  }
+}
