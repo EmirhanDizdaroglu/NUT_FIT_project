@@ -2,7 +2,7 @@ const axios = require('axios');
 
 async function testAdminLogin() {
   try {
-    const response = await axios.post('http://localhost:3000/api/adminLogin', {
+    const response = await axios.post('http://localhost:5000/api/adminLogin', {
       username: "Admin1", // Admin kullanıcı adı
       password: "strongpassword"  // Admin şifresi
     });

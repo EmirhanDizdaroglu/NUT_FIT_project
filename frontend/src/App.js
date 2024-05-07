@@ -12,14 +12,14 @@ const App = () => {
   return (
     // BrowserRouter kullanarak yönlendirme yapısını başlatır
     <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/adminLogin" element={<AdminLogin />} />
+  <Routes>
+    <Route path="/" element={<Home />} /> 
+    <Route path="/login" element={<Login />} />
+    <Route path="/register" element={<Register />} />
+    <Route path="/adminLogin" element={<AdminLogin />} />
+  </Routes>
+</Router>
 
-      </Routes>
-    </Router>
   );
 }
 

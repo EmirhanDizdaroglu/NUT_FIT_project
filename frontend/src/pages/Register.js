@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import '../styles/style.css'; // CSS dosyasını ekleyin
 
 const Register = () => {
   const [user, setUser] = useState({
@@ -13,10 +14,22 @@ const Register = () => {
     phoneNumber: '',
     password: '',
     aim: '',
-    bmi: '', // Bu alan backend'de hesaplanacak
   });
 
+  const [bmi, setBmi] = useState(null);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+
   const navigate = useNavigate();
+
+  
+  useEffect(() => {
+    if (user.height && user.weight) {
+      const heightInMeters = user.height / 100;
+      const calculatedBmi = (user.weight / (heightInMeters * heightInMeters)).toFixed(2);
+      setBmi(calculatedBmi);
+    }
+  }, [user.height, user.weight]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,21 +40,36 @@ const Register = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent default form behavior
+    e.preventDefault();
+
+    const userData = {
+      ...user,
+      bmi: bmi // Add BMI to the user object before sending
+    };
 
     try {
-      const response = await axios.post('http://localhost:5000/api/register', {
-        ...user,
-        bmi: null, // BMI boş gönderiliyor, backend bunu hesaplayacak
-      });
+      const response = await axios.post(
+        'http://localhost:5000/api/register',
+        userData, 
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
       if (response.status === 201) {
-        alert('Registration successful!');
-        navigate('/Home'); // Navigate after successful registration simdilik bu sekilde
+        setSuccess('Registration successful!');
+        navigate('/home');
+      } else {
+        setError(response.data.message);
       }
     } catch (error) {
-      console.error('Registration error:', error);
-      alert('Registration failed. Please check your information and try again.');
+      if (error.response) {
+        setError(error.response.data.message);
+      } else {
+        setError('An unexpected error occurred. Please try again.');
+      }
     }
   };
 
@@ -52,7 +80,7 @@ const Register = () => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#f0f0f0',
+        backgroundColor: '#f0f0f0', // Hafif arka plan rengi
       }}
     >
       <div
@@ -60,24 +88,44 @@ const Register = () => {
           backgroundColor: 'white',
           padding: '32px',
           boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
-          borderRadius: '8px',
+          borderRadius: '8px', // Yuvarlatılmış köşeler
         }}
       >
         <h1
           style={{
             fontSize: '24px',
             fontWeight: 'bold',
-            marginBottom: '16px',
+            marginBottom: '16px', // Başlık alt boşluğu
           }}
         >
-          Register Page
+          Register
         </h1>
+        {error && (
+          <div
+            style={{
+              color: 'red',
+              marginBottom: '16px', // Hatalar için kırmızı
+            }}
+          >
+            {error}
+          </div>
+        )}
+        {success && (
+          <div
+            style={{
+              color: 'green',
+              marginBottom: '16px', // Başarı için yeşil
+            }}
+          >
+            {success}
+          </div>
+        )}
         <form
           onSubmit={handleSubmit}
           style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: '16px',
+            gap: '16px', // Inputlar arası boşluk
           }}
         >
           <input
@@ -87,9 +135,9 @@ const Register = () => {
             value={user.name}
             onChange={handleChange}
             style={{
-              padding: '8px',
-              border: '1px solid #ccc',
-              borderRadius: '4px',
+              padding: '10px', // İç dolgu
+              border: '1px solid #ccc', // İnce çerçeve
+              borderRadius: '4px', // Yuvarlatılmış köşeler
             }}
           />
           <input
@@ -99,9 +147,10 @@ const Register = () => {
             value={user.surname}
             onChange={handleChange}
             style={{
-              padding: '8px',
+              padding: '10px',
               border: '1px solid #ccc',
               borderRadius: '4px',
+              marginBottom: '16px', // Alt boşluk
             }}
           />
           <input
@@ -111,9 +160,10 @@ const Register = () => {
             value={user.nickname}
             onChange={handleChange}
             style={{
-              padding: '8px',
+              padding: '10px',
               border: '1px solid #ccc',
               borderRadius: '4px',
+              marginBottom: '16px',
             }}
           />
           <input
@@ -123,9 +173,10 @@ const Register = () => {
             value={user.height}
             onChange={handleChange}
             style={{
-              padding: '8px',
+              padding: '10px',
               border: '1px solid #ccc',
               borderRadius: '4px',
+              marginBottom: '16px', // Alt boşluk
             }}
           />
           <input
@@ -135,21 +186,23 @@ const Register = () => {
             value={user.weight}
             onChange={handleChange}
             style={{
-              padding: '8px',
+              padding: '10px',
               border: '1px solid #ccc',
               borderRadius: '4px',
+              marginBottom: '16px',
             }}
           />
           <input
-            type="text"
+            type="email"
             name="email"
             placeholder="Email"
             value={user.email}
             onChange={handleChange}
             style={{
-              padding: '8px',
+              padding: '10px',
               border: '1px solid #ccc',
               borderRadius: '4px',
+              marginBottom: '16px',
             }}
           />
           <input
@@ -159,9 +212,10 @@ const Register = () => {
             value={user.phoneNumber}
             onChange={handleChange}
             style={{
-              padding: '8px',
+              padding: '10px',
               border: '1px solid #ccc',
               borderRadius: '4px',
+              marginBottom: '16px', // Alt boşluk
             }}
           />
           <input
@@ -171,9 +225,10 @@ const Register = () => {
             value={user.password}
             onChange={handleChange}
             style={{
-              padding: '8px',
+              padding: '10px',
               border: '1px solid #ccc',
-              borderRadius: '4px',
+              borderRadius: '4px', 
+              marginBottom: '16px', 
             }}
           />
           <input
@@ -183,19 +238,15 @@ const Register = () => {
             value={user.aim}
             onChange={handleChange}
             style={{
-              padding: '8px',
-              border: '1px solid #ccc',
-              borderRadius: '4px',
+              padding: '10px', 
+              border: '1px solid #ccc', 
+              borderRadius: '4px', 
+              marginBottom: '16px', 
             }}
           />
-          <div
-            style={{
-              padding: '8px',
-              border: '1px solid #ccc',
-              borderRadius: '4px',
-            }}
-          >
-            BMI: (to be calculated)
+          <div>
+            
+            <strong>BMI: </strong> {bmi ? bmi : 'Enter height and weight to calculate'}
           </div>
           <button
             type="submit"
@@ -203,8 +254,8 @@ const Register = () => {
               padding: '12px',
               color: 'white',
               backgroundColor: 'blue',
-              borderRadius: '4px',
               border: 'none',
+              borderRadius: '4px',
               cursor: 'pointer',
             }}
             onMouseOver={(e) => {
@@ -216,6 +267,7 @@ const Register = () => {
           >
             Register
           </button>
+
         </form>
       </div>
     </div>
