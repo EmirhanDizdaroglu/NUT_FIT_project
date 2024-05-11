@@ -41,19 +41,4 @@ router.post('/adminLogin', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
-
-// Adminler tarafından tüm kullanıcıları görüntülemek için yeni bir GET route
-router.get('/viewUsers', async (req, res) => {
-    
-    try {
-        const UserList = require('../models/userList'); // UserList modelini burada yüklüyoruz.
-        const users = await UserList.find({}, '-password'); // Şifre dışındaki tüm kullanıcı bilgilerini getir
-        res.json(users);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-});
-
-// Oluşturulan router'ı dışa aktar
-// Bu sayede bu router, uygulamanın başka yerlerinde kullanılabilir hale gelir
-module.exports = router;
+module.exports = router; 

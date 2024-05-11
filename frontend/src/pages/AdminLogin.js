@@ -26,11 +26,13 @@ const AdminLogin = () => {
       if (response.status === 200) { // Giriş başarılıysa
         const authToken = response.data.token;
         localStorage.setItem('token', authToken); // Token saklama
-        navigate('/Home'); // Başarılı girişte yönlendirme simdilik bu sekilde
+        navigate('/AdminPanel'); // Başarılı giriş sonrası Admin Panel sayfasına yönlendir
+      } else {
+        // Giriş başarısız ise hata mesajı göster
+        alert('Admin login failed. Please check your username and password.');
       }
     } catch (error) {
       console.error('AdminLogin Error:', error);
-      // Hata durumunda bir mesaj göster
       alert('AdminLogin failed. Please check your username and password.');
     }
   };

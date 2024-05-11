@@ -44,13 +44,13 @@ const Register = () => {
 
     const userData = {
       ...user,
-      bmi: bmi // Add BMI to the user object before sending
+      bmi: bmi // Ensure BMI is included in the user data sent to the backend
     };
 
     try {
       const response = await axios.post(
         'http://localhost:5000/api/register',
-        userData, 
+        userData,
         {
           headers: {
             'Content-Type': 'application/json',

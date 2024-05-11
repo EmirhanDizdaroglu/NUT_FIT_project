@@ -1,21 +1,54 @@
-// Gerekli modülleri dahil et
-const express = require('express'); // Yönlendirme için Express çatısı
-const router = express.Router(); // Yeni bir router örneği oluştur
-const DietList = require('../models/dietList'); // DietList modelini dahil et
+const express = require('express');
+const router = express.Router();
+const DietList = require('../models/dietList');
 
-// '/dietList' yoluna gelen GET isteklerini işleyecek rota tanımı
+
+
+// Tüm diyet listesi öğelerini getir
 router.get('/dietList', async (req, res) => {
     try {
-        // DietList modeli kullanarak veritabanından tüm diyet listesi girişlerini bul
         const dietList = await DietList.find();
-        // Sorgu başarılıysa, sonucu JSON formatında dön
         res.json(dietList);
     } catch (error) {
-        // Sorgu sırasında bir hata oluşursa, 500 durum kodu ile hata mesajını dön
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: "Error fetching diet list: " + error.message });
     }
 });
 
-// Oluşturulan router'ı dışa aktar
-// Bu sayede, başka dosyalarda bu router'ı kullanabiliriz
+// Yeni diyet listesi öğesi ekle
+router.post('/dietList', async (req, res) => {
+    const newDietItem = new DietList(req.body);
+    try {
+        await newDietItem.save();
+        res.status(201).json(newDietItem);
+    } catch (error) {
+        res.status(400).json({ message: "Error saving new diet item: " + error.message });
+    }
+});
+
+// Diyet listesi öğesini güncelle
+router.put('/dietList/:id', async (req, res) => {
+    try {
+        const updatedDietItem = await DietList.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!updatedDietItem) {
+            return res.status(404).json({ message: "Diet item not found." });
+        }
+        res.json(updatedDietItem);
+    } catch (error) {
+        res.status(500).json({ message: "Error updating diet item: " + error.message });
+    }
+});
+
+// Diyet listesi öğesini sil
+router.delete('/dietList/:id', async (req, res) => {
+    try {
+        const deletedDietItem = await DietList.findByIdAndDelete(req.params.id);
+        if (!deletedDietItem) {
+            return res.status(404).json({ message: "Diet item not found." });
+        }
+        res.status(200).json({ message: "Diet item deleted successfully." });
+    } catch (error) {
+        res.status(500).json({ message: "Error deleting diet item: " + error.message });
+    }
+});
+
 module.exports = router;

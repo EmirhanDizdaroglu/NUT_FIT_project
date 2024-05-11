@@ -58,3 +58,115 @@ body {
 }
 
 
+/* Ana container stillemesi */
+.container {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Başlıklar için genel stil */
+h1, h2 {
+  color: #333;
+}
+
+/* Form input ve button genel stillemesi */
+input[type="text"], input[type="email"], button {
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: calc(100% - 22px);
+}
+
+button {
+  background-color: #5c67f2;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #4a54e1;
+}
+
+/* Tablo stillemesi */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+th {
+  background-color: #f4f4f9;
+}
+
+/* Düzenleme ve silme butonları için stil */
+.edit-btn, .delete-btn {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.edit-btn {
+  background-color: #f0ad4e;
+  color: white;
+}
+
+.delete-btn {
+  background-color: #d9534f;
+  color: white;
+}
+
+.edit-btn:hover {
+  background-color: #ec971f;
+}
+
+.delete-btn:hover {
+  background-color: #c9302c;
+}
+
+.admin-panel-container {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  text-align: center;
+}
+
+.admin-panel-button {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 10px;
+  background-color: #4CAF50; /* Yeşil */
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.admin-panel-button:hover {
+  background-color: #45a049; /* Daha koyu bir yeşil */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.user-list { background-color: #2196F3; } /* Mavi */
+.user-list:hover { background-color: #1E88E5; } /* Daha koyu mavi */
+
+.diet-list { background-color: #FF9800; } /* Turuncu */
+.diet-list:hover { background-color: #FB8C00; } /* Daha koyu turuncu */
+
+.sports-movements { background-color: #9C27B0; } /* Mor */
+.sports-movements:hover { background-color: #8E24AA; } /* Daha koyu mor */

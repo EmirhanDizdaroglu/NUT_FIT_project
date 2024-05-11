@@ -10,6 +10,7 @@ const dietListItemSchema = new mongoose.Schema({
     protein: Number,       // Protein miktarı (gram cinsinden)
     fat: Number,           // Yağ miktarı (gram cinsinden)
     calories: Number,      // Toplam kalori miktarı
+    mealType: String        // Öğün türü (kahvaltı, öğle yemeği, akşam yemeği vb.)
     // öğün tipi ekle
 });
 
