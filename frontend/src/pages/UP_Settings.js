@@ -11,7 +11,7 @@ const UP_Settings = () => {
     Height: '',
     aim: ''
   });
-
+  const aimOptions = ['Loss Weight', 'Stay Fit', 'Gain Weight'];
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -164,10 +164,8 @@ const UP_Settings = () => {
               borderRadius: '4px',
             }}
           />
-          <input
-            type="text"
+          <select
             name="aim"
-            placeholder="Aim"
             value={user.aim}
             onChange={handleChange}
             style={{
@@ -175,7 +173,14 @@ const UP_Settings = () => {
               border: '1px solid #ccc',
               borderRadius: '4px',
             }}
-          />
+          >
+            <option value="" disabled>Select your aim</option>
+            {aimOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
           <button
             type="submit"
             style={{

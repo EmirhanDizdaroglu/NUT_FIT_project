@@ -9,6 +9,7 @@ import AP_DietList from './pages/AP_DietList';
 import AP_SportMovements from './pages/AP_SportMovements';
 import AP_UserList from './pages/AP_UserList';
 import UserPanel from './pages/UserPanel'; // UserPanel bileşenini ekle
+import UP_Settings from './pages/UP_Settings';
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
         <Route path="/AP_SportMovements" element={<AP_SportMovements />} />
         <Route path="/AP_UserList" element={<AP_UserList />} />
         <Route path="/userPanel" element={<UserPanel />} /> {/* Yeni rota ekle */}
+        <Route path="/UP_Settings" element={<UP_Settings />} />
       </Routes>
     </Router>
   );

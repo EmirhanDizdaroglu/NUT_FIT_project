@@ -15,7 +15,7 @@ const Register = () => {
     password: '',
     aim: '',
   });
-
+  const aimOptions = ['Loss Weight', 'Stay Fit', 'Gain Weight'];
   const [bmi, setBmi] = useState(null);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -231,7 +231,7 @@ const Register = () => {
               marginBottom: '16px', 
             }}
           />
-          <input
+          <select
             type="text"
             name="aim"
             placeholder="Aim"
@@ -243,7 +243,14 @@ const Register = () => {
               borderRadius: '4px', 
               marginBottom: '16px', 
             }}
-          />
+          >
+           <option value="">Select aim...</option>
+  {aimOptions.map((option, index) => (
+    <option key={index} value={option}>
+      {option}
+    </option>
+  ))}
+</select>
           <div>
             <strong>BMI: </strong> {bmi ? bmi : 'Enter height and weight to calculate'}
           </div>

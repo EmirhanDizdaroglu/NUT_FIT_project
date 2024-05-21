@@ -52,12 +52,13 @@ router.post('/login', async (req, res) => {
         // Oturum başlat
         req.session.userId = user._id;
 
-        res.json({ message: "Login successful.", user });
+        res.json({ message: "Login successful.", userName: user.name });
     } catch (error) {
         console.error('Error during login:', error);
         res.status(500).json({ message: error.message });
     }
 });
+
 
 // Kullanıcı profilini görüntüleme
 router.get('/userProfile', authenticateUser, async (req, res) => {

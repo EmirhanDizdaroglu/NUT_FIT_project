@@ -29,7 +29,8 @@ const Login = () => {
       );
 
       if (response.status === 200) {
-        navigate('/userPanel'); // Başarılı giriş sonrası yönlendirme
+        const userName = response.data.userName; // Gelen yanıttan kullanıcı adını al
+        navigate('/userPanel', { state: { userName } }); // Kullanıcı adını state olarak gönder
       }
     } catch (error) {
       console.error('Login Error:', error);
