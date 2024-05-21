@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const UserPanel = () => {
+const UP_Settings = () => {
   const [user, setUser] = useState({
     name: '',
     surname: '',
@@ -195,4 +195,4 @@ const UserPanel = () => {
   );
 };
 
-export default UserPanel;
+export default UP_Settings;

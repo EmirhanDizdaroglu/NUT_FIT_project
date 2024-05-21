@@ -20,7 +20,7 @@ function AP_UserList() {
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/userList`);
+            const response = await axios.get(`http://localhost:5000/api/userList`, { withCredentials: true });
             setUsers(response.data);
             setAllUsers(response.data);
         } catch (error) {
@@ -52,7 +52,7 @@ function AP_UserList() {
         if (editingUser) {
             const url = `http://localhost:5000/api/user/${editingUser._id}`;
             try {
-                const response = await axios.put(url, formData);
+                const response = await axios.put(url, formData, { withCredentials: true });
                 const updatedUsers = users.map(user => user._id === editingUser._id ? response.data : user);
                 setUsers(updatedUsers);
                 setEditingUser(null);
@@ -70,7 +70,7 @@ function AP_UserList() {
 
     const handleDelete = async (userId) => {
         try {
-            await axios.delete(`http://localhost:5000/api/user/${userId}`);
+            await axios.delete(`http://localhost:5000/api/user/${userId}`, { withCredentials: true });
             setUsers(users.filter(user => user._id !== userId));
         } catch (error) {
             console.error('Error deleting user:', error);
@@ -82,15 +82,43 @@ function AP_UserList() {
             <h1>Admin Panel</h1>
             <h2>User List</h2>
             <form onSubmit={e => e.preventDefault()}>
-                <input type="text" placeholder="Search by name or surname" value={searchTerm} onChange={handleSearchChange} />
-                <button type="submit">Search</button>
+                <input
+                    type="text"
+                    placeholder="Search by name or surname"
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                />
             </form>
             {editingUser && (
                 <form onSubmit={submitUser}>
-                    <input type="text" name="name" value={formData.name} onChange={handleFormChange} placeholder="Name" />
-                    <input type="text" name="surname" value={formData.surname} onChange={handleFormChange} placeholder="Surname" />
-                    <input type="email" name="email" value={formData.email} onChange={handleFormChange} placeholder="Email" />
-                    <input type="text" name="phoneNumber" value={formData.phoneNumber} onChange={handleFormChange} placeholder="Phone Number" />
+                    <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleFormChange}
+                        placeholder="Name"
+                    />
+                    <input
+                        type="text"
+                        name="surname"
+                        value={formData.surname}
+                        onChange={handleFormChange}
+                        placeholder="Surname"
+                    />
+                    <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleFormChange}
+                        placeholder="Email"
+                    />
+                    <input
+                        type="text"
+                        name="phoneNumber"
+                        value={formData.phoneNumber}
+                        onChange={handleFormChange}
+                        placeholder="Phone Number"
+                    />
                     <button type="submit">Update User</button>
                 </form>
             )}

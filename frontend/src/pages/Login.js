@@ -19,24 +19,24 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Formun otomatik olarak yeniden yüklenmesini önler
+    e.preventDefault();
     try {
+      console.log('Submitting credentials:', credentials); // Gönderilen veriyi logla
       const response = await axios.post(
-        'http://localhost:5000/api/login', // Doğru endpoint login
-        credentials
+        'http://localhost:5000/api/login', 
+        credentials,
+        { withCredentials: true } // Oturum bilgilerini taşı
       );
 
-      if (response.status === 200) { // Başarılı giriş durumunda
-        const authToken = response.data.token; // Token alınıyor mu kontrol edin
-        localStorage.setItem('token', authToken); // Token'ı depola
-        navigate('/dashboard'); // Başarılı giriş sonrası yönlendirme
+      if (response.status === 200) {
+        navigate('/userPanel'); // Başarılı giriş sonrası yönlendirme
       }
     } catch (error) {
-      console.error('Login Error:', error); // Hata yakala
+      console.error('Login Error:', error);
       if (error.response && error.response.status === 400) {
-        alert('Invalid email or password.'); // Hatalı giriş durumu
+        alert('Invalid email or password.');
       } else {
-        alert('An unexpected error occurred.'); // Diğer hatalar
+        alert('An unexpected error occurred.');
       }
     }
   };
@@ -67,7 +67,7 @@ const Login = () => {
           Login Page
         </h1>
         <form
-          onSubmit={handleSubmit} // Form gönderildiğinde handleSubmit'i çağır
+          onSubmit={handleSubmit}
           style={{
             display: 'flex',
             flexDirection: 'column',
@@ -76,10 +76,10 @@ const Login = () => {
         >
           <input
             type="email"
-            name="email" // Email alanı
+            name="email"
             placeholder="Email"
-            value={credentials.email} // Kullanıcıdan alınan email değeri
-            onChange={handleChange} // Değer değiştiğinde handleChange'i çağır
+            value={credentials.email}
+            onChange={handleChange}
             style={{
               padding: '8px',
               border: '1px solid #ccc',
@@ -88,10 +88,10 @@ const Login = () => {
           />
           <input
             type="password"
-            name="password" // Şifre alanı
+            name="password"
             placeholder="Password"
-            value={credentials.password} // Kullanıcıdan alınan şifre değeri
-            onChange={handleChange} // Değer değiştiğinde handleChange'i çağır
+            value={credentials.password}
+            onChange={handleChange}
             style={{
               padding: '8px',
               border: '1px solid #ccc',

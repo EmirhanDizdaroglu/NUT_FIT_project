@@ -8,8 +8,8 @@ const Register = () => {
     name: '',
     surname: '',
     nickname: '',
-    height: '',
-    weight: '',
+    Height: '', // 'height' yerine 'Height'
+    Weight: '', // 'weight' yerine 'Weight'
     email: '',
     phoneNumber: '',
     password: '',
@@ -22,14 +22,13 @@ const Register = () => {
 
   const navigate = useNavigate();
 
-  
   useEffect(() => {
-    if (user.height && user.weight) {
-      const heightInMeters = user.height / 100;
-      const calculatedBmi = (user.weight / (heightInMeters * heightInMeters)).toFixed(2);
+    if (user.Height && user.Weight) {
+      const heightInMeters = user.Height / 100; // 'user.height' yerine 'user.Height'
+      const calculatedBmi = (user.Weight / (heightInMeters * heightInMeters)).toFixed(2); // 'user.weight' yerine 'user.Weight'
       setBmi(calculatedBmi);
     }
-  }, [user.height, user.weight]);
+  }, [user.Height, user.Weight]); // 'user.Height' ve 'user.Weight' doğru kullanıldı
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -55,12 +54,13 @@ const Register = () => {
           headers: {
             'Content-Type': 'application/json',
           },
+          withCredentials: true // CORS sorununu önlemek için oturum bilgilerini taşı
         }
       );
 
       if (response.status === 201) {
         setSuccess('Registration successful!');
-        navigate('/home');
+        navigate('/login'); // '/Login' yerine '/login'
       } else {
         setError(response.data.message);
       }
@@ -168,9 +168,9 @@ const Register = () => {
           />
           <input
             type="number"
-            name="height"
+            name="Height" // 'height' yerine 'Height'
             placeholder="Height (cm)"
-            value={user.height}
+            value={user.Height}
             onChange={handleChange}
             style={{
               padding: '10px',
@@ -181,9 +181,9 @@ const Register = () => {
           />
           <input
             type="number"
-            name="weight"
+            name="Weight" // 'weight' yerine 'Weight'
             placeholder="Weight (kg)"
-            value={user.weight}
+            value={user.Weight}
             onChange={handleChange}
             style={{
               padding: '10px',
@@ -245,7 +245,6 @@ const Register = () => {
             }}
           />
           <div>
-            
             <strong>BMI: </strong> {bmi ? bmi : 'Enter height and weight to calculate'}
           </div>
           <button
@@ -267,7 +266,6 @@ const Register = () => {
           >
             Register
           </button>
-
         </form>
       </div>
     </div>

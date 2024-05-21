@@ -1,18 +1,16 @@
-// Gerekli modülleri projeye dahil et
 const express = require('express');
 const bcrypt = require('bcryptjs');
-const router = express.Router(); // Express router'ını oluştur
-const UserList = require('../models/userList'); // UserList modelini dahil et
+const router = express.Router();
+const UserList = require('../models/userList');
 
-// '/userList' yoluna gelen GET isteklerini işle
-router.get('/userList', async (req, res) => {
-    try {
-        const userList = await UserList.find();
-        res.json(userList);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
+// Kullanıcı oturumunu doğrulama middleware'i
+function authenticateUser(req, res, next) {
+    if (req.session.userId) {
+        next();
+    } else {
+        res.status(401).json({ message: "Unauthorized" });
     }
-});
+}
 
 // Kullanıcı kayıt için
 router.post('/register', async (req, res) => {
@@ -31,6 +29,7 @@ router.post('/register', async (req, res) => {
         await user.save();
         res.status(201).json({ message: "User registered successfully.", user });
     } catch (error) {
+        console.error('Error during registration:', error);
         res.status(500).json({ message: error.message });
     }
 });
@@ -50,17 +49,20 @@ router.post('/login', async (req, res) => {
             return res.status(400).json({ message: "Invalid email or password." });
         }
 
+        // Oturum başlat
+        req.session.userId = user._id;
+
         res.json({ message: "Login successful.", user });
     } catch (error) {
+        console.error('Error during login:', error);
         res.status(500).json({ message: error.message });
     }
 });
 
 // Kullanıcı profilini görüntüleme
-router.get('/userProfile', async (req, res) => {
+router.get('/userProfile', authenticateUser, async (req, res) => {
     try {
-        const userId = req.user.id; // Oturumdan alınacak
-        const user = await UserList.findById(userId);
+        const user = await UserList.findById(req.session.userId);
         if (!user) {
             return res.status(404).json({ message: "User not found." });
         }
@@ -71,12 +73,11 @@ router.get('/userProfile', async (req, res) => {
 });
 
 // Kullanıcı profilini güncelleme
-router.put('/user/:id', async (req, res) => {
-    const { id } = req.params;
+router.put('/userProfile', authenticateUser, async (req, res) => {
     const { name, surname, email, phoneNumber, Weight, Height, aim } = req.body;
 
     try {
-        const updatedUser = await UserList.findByIdAndUpdate(id, {
+        const updatedUser = await UserList.findByIdAndUpdate(req.session.userId, {
             name, surname, email, phoneNumber, Weight, Height, aim
         }, { new: true });
 
@@ -85,6 +86,17 @@ router.put('/user/:id', async (req, res) => {
         }
 
         res.json(updatedUser);
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Kullanıcı listesi
+router.get('/userList', async (req, res) => {
+    try {
+        const userList = await UserList.find();
+        res.json(userList);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -102,6 +114,27 @@ router.delete('/user/:id', async (req, res) => {
 
         res.status(200).json({ message: "User deleted successfully." });
     } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Kullanıcı güncelleme
+router.put('/user/:id', async (req, res) => {
+    const { id } = req.params;
+    const { name, surname, email, phoneNumber, Weight, Height, aim } = req.body;
+
+    try {
+        const updatedUser = await UserList.findByIdAndUpdate(id, {
+            name, surname, email, phoneNumber, Weight, Height, aim
+        }, { new: true });
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: "User not found." });
+        }
+
+        res.json(updatedUser);
+    } catch (error) {
+        console.error('Error updating user:', error);
         res.status(500).json({ message: error.message });
     }
 });
