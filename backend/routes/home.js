@@ -3,7 +3,7 @@ const router = express.Router();
 
 // Home endpoint'ine JSON döndüren bir GET rotası
 router.get('/home', (req, res) => {
-  res.json({ title: 'Express Home Page', content: 'Welcome to our React-Express application!' });
+  res.json({ title: 'NUT-FIT PROJECT', content: 'Get Ready to See the BEST VERSION of Yourself!' });
 });
 
 module.exports = router;

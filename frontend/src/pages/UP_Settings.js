@@ -9,7 +9,8 @@ const UP_Settings = () => {
     phoneNumber: '',
     Weight: '',
     Height: '',
-    aim: ''
+    aim: '',
+    BMI: ''
   });
   const aimOptions = ['Loss Weight', 'Stay Fit', 'Gain Weight'];
   const [loading, setLoading] = useState(true);
@@ -31,6 +32,21 @@ const UP_Settings = () => {
     fetchUser();
   }, []);
 
+  useEffect(() => {
+    const calculateBMI = () => {
+      if (user.Weight && user.Height) {
+        const heightInMeters = user.Height / 100;
+        const bmi = (user.Weight / (heightInMeters * heightInMeters)).toFixed(2);
+        setUser((prevUser) => ({
+          ...prevUser,
+          BMI: bmi,
+        }));
+      }
+    };
+
+    calculateBMI();
+  }, [user.Weight, user.Height]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser((prevUser) => ({
@@ -41,19 +57,23 @@ const UP_Settings = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.put('http://localhost:5000/api/userProfile', user, {
-        withCredentials: true
-      });
+    const heightInMeters = user.Height / 100;
+    const bmi = (user.Weight / (heightInMeters * heightInMeters)).toFixed(2);
 
-      if (response.status === 200) {
-        alert('Profile updated successfully.');
-      }
+    try {
+        const response = await axios.put('http://localhost:5000/api/userProfile', { ...user, BMI: bmi }, {
+            withCredentials: true
+        });
+
+        if (response.status === 200) {
+            alert('Profile updated successfully.');
+        }
     } catch (error) {
-      console.error('Error updating profile:', error);
-      alert('An error occurred while updating the profile.');
+        console.error('Error updating profile:', error);
+        alert('An error occurred while updating the profile.');
     }
-  };
+};
+
 
   if (loading) {
     return <div>Loading...</div>;

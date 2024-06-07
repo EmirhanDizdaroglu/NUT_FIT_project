@@ -12,16 +12,18 @@ function authenticateUser(req, res, next) {
     }
 }
 
-// Kullanıcı kayıt için
+// Kullanıcı kayıt işlemi
 router.post('/register', async (req, res) => {
     const { name, surname, nickname, Weight, Height, email, phoneNumber, password, aim, bmi } = req.body;
     
     try {
+        // Mevcut bir kullanıcı olup olmadığını kontrol et
         const existingUser = await UserList.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ message: "Email already in use." });
         }
 
+        // Yeni kullanıcı oluştur ve kaydet
         const user = new UserList({
             name, surname, nickname, Weight, Height, email, phoneNumber, password, aim, BMI: bmi
         });
@@ -29,21 +31,23 @@ router.post('/register', async (req, res) => {
         await user.save();
         res.status(201).json({ message: "User registered successfully.", user });
     } catch (error) {
-        console.error('Error during registration:', error);
+        console.error('Kayıt sırasında hata oluştu:', error);
         res.status(500).json({ message: error.message });
     }
 });
 
-// Kullanıcı giriş için
+// Kullanıcı giriş işlemi
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     try {
+        // Kullanıcıyı e-posta ile bul
         const user = await UserList.findOne({ email });
         if (!user) {
             return res.status(404).json({ message: "User not found." });
         }
 
+        // Parolayı kontrol et
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ message: "Invalid email or password." });
@@ -54,15 +58,15 @@ router.post('/login', async (req, res) => {
 
         res.json({ message: "Login successful.", userName: user.name });
     } catch (error) {
-        console.error('Error during login:', error);
+        console.error('Giriş sırasında hata oluştu:', error);
         res.status(500).json({ message: error.message });
     }
 });
 
-
 // Kullanıcı profilini görüntüleme
 router.get('/userProfile', authenticateUser, async (req, res) => {
     try {
+        // Kullanıcıyı oturum kimliği ile bul
         const user = await UserList.findById(req.session.userId);
         if (!user) {
             return res.status(404).json({ message: "User not found." });
@@ -78,8 +82,13 @@ router.put('/userProfile', authenticateUser, async (req, res) => {
     const { name, surname, email, phoneNumber, Weight, Height, aim } = req.body;
 
     try {
+        // BMI hesapla
+        const heightInMeters = Height / 100;
+        const BMI = (Weight / (heightInMeters * heightInMeters)).toFixed(2);
+
+        // Kullanıcıyı güncelle
         const updatedUser = await UserList.findByIdAndUpdate(req.session.userId, {
-            name, surname, email, phoneNumber, Weight, Height, aim
+            name, surname, email, phoneNumber, Weight, Height, aim, BMI
         }, { new: true });
 
         if (!updatedUser) {
@@ -88,7 +97,7 @@ router.put('/userProfile', authenticateUser, async (req, res) => {
 
         res.json(updatedUser);
     } catch (error) {
-        console.error('Error updating profile:', error);
+        console.error('Profil güncelleme sırasında hata oluştu:', error);
         res.status(500).json({ message: error.message });
     }
 });
@@ -96,6 +105,7 @@ router.put('/userProfile', authenticateUser, async (req, res) => {
 // Kullanıcı listesi
 router.get('/userList', async (req, res) => {
     try {
+        // Tüm kullanıcıları getir
         const userList = await UserList.find();
         res.json(userList);
     } catch (error) {
@@ -103,10 +113,11 @@ router.get('/userList', async (req, res) => {
     }
 });
 
-// Kullanıcı silme
+// Kullanıcı silme işlemi
 router.delete('/user/:id', async (req, res) => {
     try {
         const { id } = req.params;
+        // Kullanıcıyı sil
         const deletedUser = await UserList.findByIdAndDelete(id);
 
         if (!deletedUser) {
@@ -119,12 +130,13 @@ router.delete('/user/:id', async (req, res) => {
     }
 });
 
-// Kullanıcı güncelleme
+// Kullanıcı güncelleme işlemi
 router.put('/user/:id', async (req, res) => {
     const { id } = req.params;
     const { name, surname, email, phoneNumber, Weight, Height, aim } = req.body;
 
     try {
+        // Kullanıcıyı güncelle
         const updatedUser = await UserList.findByIdAndUpdate(id, {
             name, surname, email, phoneNumber, Weight, Height, aim
         }, { new: true });
@@ -135,7 +147,7 @@ router.put('/user/:id', async (req, res) => {
 
         res.json(updatedUser);
     } catch (error) {
-        console.error('Error updating user:', error);
+        console.error('Kullanıcı güncelleme sırasında hata oluştu:', error);
         res.status(500).json({ message: error.message });
     }
 });
